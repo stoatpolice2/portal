@@ -1,1 +1,353 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MY LINKS</title>
 
+  <!-- ファビコンの設定 -->
+  <link href="images/favicon.webp" rel="icon" type="image/x-icon">
+  
+  <style>
+    /* ------------------------------------
+       基本設定・アメコミ風ドット背景
+    ------------------------------------ */
+    :root {
+      --bg-yellow: #fde047;
+      --panel-bg: #ffffff;
+      --border-color: #000000;
+      --accent-red: #ff2a5f;
+      --accent-blue: #00d2ff;
+      --accent-yellow: #ffee00;
+      --shadow-offset: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Impact', 'Arial Black', sans-serif;
+      background-color: #ffffff; /* 画像が読み込まれるまでの背景色 */
+
+      /* 背景画像へのパスを指定 */
+      background-image: url('../images/bg.webp');
+
+      /* 画像の表示調整 */
+      background-size: cover;       /* 画面全体を覆うように拡大縮小 */
+      background-position: center;  /* 中央寄せ */
+      background-repeat: no-repeat; /* 繰り返さない */
+      background-attachment: fixed; /* スクロールしても背景を固定する（お好みで） */
+
+      color: #000;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    /* ------------------------------------
+       プロフィールブロック（ヒーローパネル）
+    ------------------------------------ */
+    .profile-card {
+      background-color: var(--accent-yellow);
+      border: 4px solid var(--border-color);
+      box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--border-color);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    @media (min-width: 600px) {
+      .profile-card {
+        flex-direction: row;
+        text-align: left;
+        gap: 24px;
+      }
+    }
+
+    .profile-icon-wrapper {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .profile-icon {
+      width: 110px;
+      height: 110px;
+      border: 4px solid var(--border-color);
+      object-fit: cover;
+      background-color: #ccc;
+      /* 角ばった星形（バースト）の後ろに配置 */
+      position: relative;
+      z-index: 1;
+    }
+
+    .icon-burst {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 130px;
+      height: 130px;
+      background-color: var(--accent-red);
+      clip-path: polygon(50% 0%, 63% 18%, 82% 9%, 78% 29%, 100% 38%, 88% 55%, 98% 75%, 77% 79%, 71% 100%, 52% 87%, 33% 98%, 28% 78%, 5% 81%, 13% 60%, 0% 43%, 19% 32%, 11% 12%, 32% 17%);
+      z-index: 0;
+    }
+
+    .profile-info {
+      flex-grow: 1;
+      font-family: sans-serif; /* プロフィール本文は可読性を確保 */
+    }
+
+    .handle-name {
+      font-family: 'Impact', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #000;
+      text-shadow: 2px 2px 0px var(--accent-blue);
+      margin-bottom: 8px;
+    }
+
+    .profile-bio {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      font-weight: bold;
+      background-color: #f0f0f0;
+      padding: 10px 14px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      position: relative;
+    }
+
+    /* 吹き出しの三角部分 */
+    .profile-bio::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      border-width: 0 10px 10px 10px;
+      border-style: solid;
+      border-color: transparent transparent var(--border-color) transparent;
+    }
+
+    /* ------------------------------------
+       リンクグリッド（9件）
+    ------------------------------------ */
+    .links-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 600px) {
+      .links-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 850px) {
+      .links-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* アメコミのコマ（パネル）風カード */
+    .comic-card {
+      background-color: var(--panel-bg);
+      border: 4px solid var(--border-color);
+      box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--border-color);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .comic-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: calc(var(--shadow-offset) + 2px) calc(var(--shadow-offset) + 2px) 0px var(--border-color);
+    }
+
+    /* 画像背景付きの角ばったボタン */
+    .link-button {
+      display: block;
+      height: 140px;
+      border-bottom: 4px solid var(--border-color);
+      text-decoration: none;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      /* 暗めのオーバーレイを重ねて文字を見やすくする */
+      background-blend-mode: multiply;
+      background-color: rgba(0, 0, 0, 0.35);
+      transition: background-color 0.2s ease;
+    }
+
+    .link-button:hover {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+
+    .link-title {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      background-color: var(--accent-yellow);
+      color: #000;
+      border: 3px solid var(--border-color);
+      padding: 6px 10px;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      box-shadow: 3px 3px 0px var(--border-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* コメント吹き出しエリア */
+    .comment-box {
+      padding: 12px;
+      background-color: #fff;
+      font-family: sans-serif;
+      font-size: 0.85rem;
+      font-weight: bold;
+      line-height: 1.4;
+      flex-grow: 1;
+      position: relative;
+    }
+
+    .comment-box::before {
+      content: 'TALK!';
+      position: absolute;
+      top: -12px;
+      right: 10px;
+      background-color: var(--accent-red);
+      color: #fff;
+      font-family: 'Impact', sans-serif;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border: 2px solid var(--border-color);
+      transform: rotate(5deg);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- プロフィールブロック -->
+    <header class="profile-card">
+      <div class="profile-icon-wrapper">
+        <div class="icon-burst"></div>
+        <img src="images/icon.webp" alt="プロフィールアイコン" class="profile-icon">
+      </div>
+      <div class="profile-info">
+        <h1 class="handle-name">怪盗オコジョポリス</h1>
+        <p class="profile-bio">
+          二次創作イラスト・小説・ゲームの制作＆Webページの制作が趣味です。
+        </p>
+      </div>
+    </header>
+
+    <!-- リンク一覧（9件） -->
+    <main class="links-grid" id="linksContainer">
+      <!-- JavaScriptによりカードが動的生成されます -->
+    </main>
+
+  </div>
+
+  <script>
+    // 9件のリンクデータとコメント
+    const linkData = [
+      {
+        title: "Bluesky",
+        url: "https://bsky.app/profile/stoatpolice2.bsky.social",
+        image: "images/bluesky.webp",
+        comment: "メインで利用しているSNSです。ゲームやWebサイトの話題が多めです。"
+      },
+      {
+        title: "pixiv",
+        url: "https://www.pixiv.net/users/45637349",
+        image: "images/pixiv.webp",
+        comment: "作品がある程度まとまったら投稿しています。新旧作品ごちゃ混ぜ。"
+      },
+      {
+        title: "Xfolio",
+        url: "https://xfolio.jp/portfolio/StoatPolice2",
+        image: "images/xfolio.webp",
+        comment: "現在はパワプロの二次創作のみ投稿しています。pixivより更新がこまめです。"
+      },
+      {
+        title: "Wavebox",
+        url: "https://wavebox.me/wave/5mgaf644z1a0hker/",
+        image: "images/wave.webp",
+        comment: "感想やご連絡がありましたらこちらまで。"
+      },
+      {
+        title: "鼠の足跡 別館",
+        url: "https://akatsukibrothers.wixsite.com/ashiato",
+        image: "images/ashiato.webp",
+        comment: "パワプロの二次創作を展示しています。BL、R指定作品も含みます。"
+      },
+      {
+        title: "ねずみの足跡",
+        url: "https://stoat.web.fc2.com/index.html",
+        image: "images/nezumi.webp",
+        comment: "パワプロの二次創作のうのうち、BLやR指定ではないもののみ展示しています。"
+      },
+      {
+        title: "Stoat Labo",
+        url: "https://stoatpolice2.github.io/labo/",
+        image: "images/stoat.webp",
+        comment: "同人サイト向けWebサイト用テンプレート配布＆Webツール公開サイトです。"
+      },
+      {
+        title: "Glis Studio",
+        url: "https://stoatpolice2.github.io/glis/",
+        image: "images/glis.webp",
+        comment: "生成AIで作成した二次創作イラストや動画を展示しています。"
+      },
+      {
+        title: "G×H",
+        url: "https://caspardt.web.fc2.com/",
+        image: "images/gh.webp",
+        comment: "自作の同人ゲーム置き場です。一次創作と二次創作が混ざっています。"
+      }
+    ];
+
+    // カード要素の生成と挿入
+    const container = document.getElementById('linksContainer');
+
+    linkData.forEach((item) => {
+      const card = document.createElement('article');
+      card.className = 'comic-card';
+
+      card.innerHTML = `
+        <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-button" style="background-image: url('${item.image}');">
+          <span class="link-title">${item.title}</span>
+        </a>
+        <div class="comment-box">
+          ${item.comment}
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+  </script>
+
+</body>
+</html>
